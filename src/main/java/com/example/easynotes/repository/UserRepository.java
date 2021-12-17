@@ -44,13 +44,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where note.createdAt >= :date" )
     List<User> findUserByNoteCreatedAtLessOrEqualDate(@Param("date") Date date);
 
-
-
-
-
-
-
-
+    /*
+    @Override
+    default List<User> findAll() {
+        return null;
+    }*/
 
     //    // Ejemplo con like
     //    List<User> findUserByLastNameLikeAndFirstNameLike(String lastName, String firstName);

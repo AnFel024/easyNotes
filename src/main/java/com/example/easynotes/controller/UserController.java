@@ -20,6 +20,11 @@ public class UserController {
         this.userService = userService;
     }
 
+    @GetMapping("/userCategory")
+    public List<UserCategoryResponseDTO> getAllUsersCategory(){
+        return userService.getAllUsersCategory();
+    }
+
     @GetMapping("/all")
     public List<UserResponseDTO> getAllUsers() {
         return userService.getAllUsers();
