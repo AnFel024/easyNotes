@@ -1,6 +1,7 @@
 package com.example.easynotes.service;
 
 import com.example.easynotes.dto.*;
+import com.example.easynotes.enumerator.TypeNote;
 import com.example.easynotes.exception.ResourceNotFoundException;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.model.Thank;
@@ -158,6 +159,20 @@ public class NoteService implements INoteService {
                 }
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public TypeNoteDTO noteClasification(Long id) {
+        TypeNote typeNote = null;
+        Note note = noteRepository.findById(id)
+                .orElseThrow(()-> new RuntimeException("El id no existe"));
+        int countThanks= noteRepository.findNumberOfThanksByNote(id)
+                .get("Count_thanks");
+        if(countThanks<5) typeNote = TypeNote.NORMAL;
+        else if (countThanks<=10) typeNote = TypeNote.DE_INTERES;
+        else typeNote = TypeNote.DESTACADA;
+
+        return new TypeNoteDTO(note.getTitle(), note.getAuthor().getFirstName(), typeNote);
     }
 }
 
