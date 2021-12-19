@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -112,6 +113,63 @@ public class UserService implements IUserService {
         return modelMapper.map(user, UserResponseWithCantNotesDTO.class);
     }
 
+    @Override
+    public List<UserCategoryResponseDTO> getAllUsersCategory() {
+        List<User> userList= userRepository.findAll();
+
+        return userList.stream()
+                .map(user -> new UserCategoryResponseDTO(
+                        user.getId(),
+                        user.getFirstName(),
+                        user.getLastName(),
+                        publicationType(
+                                user.getAuthorNotes()
+                                        .stream()
+                                        .map(Note::getCreatedAt)
+                                        .collect(Collectors.toList())
+                        )
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private String publicationType(List<LocalDate> datesList){
+        System.out.println("Prueba");
+        datesList.forEach(System.out::println);
+        int daysFlag= 0;
+        int weekFlag= 0;
+        for (int i = 0; i <3; i++) {
+            final int pos= i;
+            if (datesList.stream()
+                    .anyMatch(date ->  LocalDate.now().minusDays(pos).compareTo(date) == 0))
+                daysFlag++;
+            List<LocalDate> tempDates= datesList.stream()
+                                                    .filter(
+                                                            date -> LocalDate.now()
+                                                                    .minusWeeks(pos)
+                                                                    .compareTo(date.minusWeeks(pos-1)) > 0)
+                                                    .collect(Collectors.toList());
+            tempDates.forEach(System.out::println);
+            if (tempDates.stream()
+                    .anyMatch(date -> LocalDate.now().minusWeeks(pos).compareTo(date.minusWeeks(pos-1)) < 7))
+                    //.anyMatch(date -> LocalDate.now().minusWeeks(pos).compareTo(date.minusWeeks(pos-1))  7))
+                weekFlag++;
+        }
+
+        if (daysFlag==3)
+            return "PublicadorDiario";
+        else if (weekFlag==3)
+            return "PublicadorSemanal";
+        else
+            return "Publicador";
+    }
+
+
+    /**
+     * Endpoint Get con la funcionalidad de traer un CategoriaUsuario
+     *     PublicadorDiario :En cada una de los tres días hayan publicado al menos una nota en cada dia
+     *     PublicadorSemanal : En cada una de las tres semanas ha publicado al menos una nota en cada semana
+     *     Publicador: No cumple las anteriores
+     */
 
     @Override
     public UserResponseDTO updateUser(Long userId,

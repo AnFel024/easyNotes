@@ -17,12 +17,15 @@ VALUES
 INSERT INTO `note`
     (`id`,`content`,`created_at`,`title`,`updated_at`,`author_id`)
 VALUES
-    (0,'Si el tiempo no se me pasa más cuando se corta la luz1','2019-12-06','Que hacemos1?','2021-12-06',1),
-    (1,'Si el tiempo no se me pasa más cuando se corta la luz2','2020-12-06','Que hacemos2?','2021-12-06',1),
-    (14,'Si el tiempo no se me pasa más cuando se corta la luz3','2020-12-06','Que hacemos3?','2021-12-06',1),
-    (29,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
-    (30,'Si el tiempo no se me pasa más cuando se corta la luz4','2020-12-06','Que hacemos4?','2021-12-06',1),
-    (37,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-06','Que hacemos5?','2021-12-06',1);
+    (0,'Si el tiempo no se me pasa más cuando se corta la luz1','2019-12-06','Que hacemos1?','2021-12-06',4),
+    (1,'Si el tiempo no se me pasa más cuando se corta la luz2','2020-12-06','Que hacemos2?','2021-12-06',4),
+    (14,'Si el tiempo no se me pasa más cuando se corta la luz3','2020-12-06','Que hacemos3?','2021-12-06',3),
+    (29,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-11-30','Que hacemos4?','2021-12-06',2),
+    (28,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-16','Que hacemos4?','2021-12-06',2),
+    (30,'Si el tiempo no se me pasa más cuando se corta la luz4','2021-12-06','Que hacemos4?','2021-12-06',2),
+    (37,'Si el tiempo no se me pasa más cuando se corta la luz5','2021-12-16','Que hacemos5?','2021-12-06',1),
+    (56,'Si el tiempo no se me pasa más cuando se corta la luz6','2021-12-15','Que hacemos5?','2021-12-06',1),
+    (59,'Si el tiempo no se me pasa más cuando se corta la luz7','2021-12-17','Que hacemos5?','2021-12-06',1);
 
 
 INSERT INTO `thank`
