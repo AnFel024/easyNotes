@@ -1,13 +1,10 @@
 package com.example.easynotes.dto;
 
 import com.example.easynotes.enumerator.TypeNote;
-import com.example.easynotes.model.User;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
-@Getter
-@Setter
+@Data
 @AllArgsConstructor
 public class TypeNoteDTO {
 

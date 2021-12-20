@@ -61,13 +61,14 @@ public class NoteController {
         return noteService.getThreeMoreThankedNotes(year);
     }
 
-    /*
-    1- Endpoint Get con la funcionalidad de traer un TipoNota {Destacada, DeInteres, Normal}
-    Destacada: Más de 10 Thanks
-    DeInteres: Con 5 Thanks o más
-    Normal: Menos de 5 Thanks
+
+    /***
+     * Endpoint Get con la funcionalidad de traer un TipoNota {Destacada, DeInteres, Normal}
+     * @param id de una note
+     * @return Destacada: Más de 10 Thanks
+     *         DeInteres: Con 5 Thanks o más
+     *         Normal: Menos de 5 Thanks
      */
-    //@ResponseStatus(HttpStatus.ACCEPTED,"")
     @GetMapping("/tipo-note/{id}")
     public TypeNoteDTO getNoteClasification(@PathVariable Long id){
         return noteService.noteClasification(id);

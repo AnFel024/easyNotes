@@ -55,4 +55,7 @@ class NoteControllerTest {
     void getNotesWithLikesByYear() {
         noteController.getNotesWithLikesByYear(2020);
     }
+
+    @Test
+    void getClasificationNoteById(){noteController.getNoteClasification(1L);}
 }

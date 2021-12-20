@@ -1,6 +1,8 @@
 package com.example.easynotes.service;
 
 import com.example.easynotes.dto.NoteRequestDTO;
+import com.example.easynotes.dto.TypeNoteDTO;
+import com.example.easynotes.enumerator.TypeNote;
 import com.example.easynotes.exception.ResourceNotFoundException;
 import com.example.easynotes.model.Note;
 import com.example.easynotes.model.Thank;
@@ -9,11 +11,15 @@ import com.example.easynotes.repository.NoteRepository;
 import com.example.easynotes.repository.UserRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.Mockito;
 import org.modelmapper.ModelMapper;
 
 import javax.naming.spi.ResolveResult;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -28,6 +34,7 @@ class NoteServiceTest {
     ModelMapper modelMapper = new ModelMapper();
 
     NoteService noteService = new NoteService(noteRepository, userRepository, modelMapper);
+
 
     @Test
     void getAllNotes() {
@@ -104,5 +111,98 @@ class NoteServiceTest {
     @Test
     void getThreeMoreThankedNotes() {
         noteService.getThreeMoreThankedNotes(2020);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {0,3,4}) //Menor que 5 deberia devolver Normal
+    void getClasificationNoteNormal(int input){
+        Long idNote = 1L;
+        //Arrange (Cree el Note y User con los Setts porque son entidades
+        // que sino requieren la carga de todos sus atributos
+        Note note = new Note();
+        User user = new User();
+        user.setFirstName("J K Rowling");
+        note.setAuthor(user);
+        note.setTitle("Harry Potter");
+
+        Map<String,Integer>numberOfThanks= Map.of("Count_thanks", input);
+
+        //Arrange Expect
+        TypeNoteDTO expectNote = new TypeNoteDTO(note.getTitle(),user.getFirstName(),TypeNote.NORMAL);
+
+        Mockito.when(noteRepository.findById(idNote)).thenReturn(Optional.of(note));
+        Mockito.when(noteRepository.findNumberOfThanksByNote(idNote)).thenReturn(numberOfThanks);
+
+        //Assert
+        TypeNoteDTO response = noteService.noteClasification(idNote);
+
+        Mockito.verify(noteRepository,Mockito.atLeastOnce())
+                .findById(idNote);
+        Mockito.verify(noteRepository,Mockito.times(1))
+                .findNumberOfThanksByNote(idNote);
+
+        Assertions.assertEquals(expectNote,response);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {5,7,9}) // DeInteres: Con 5 Thanks o más
+    void getClasificationDeInteres(int input){
+        Long idNote = 1L;
+        //Arrange (Cree el Note y User con los Setts porque son entidades
+        // que sino requieren la carga de todos sus atributos
+        Note note = new Note();
+        User user = new User();
+        user.setFirstName("J K Rowling");
+        note.setAuthor(user);
+        note.setTitle("Harry Potter");
+
+        Map<String,Integer>numberOfThanks= Map.of("Count_thanks", input);
+
+        //Arrange Expect
+        TypeNoteDTO expectNote = new TypeNoteDTO(note.getTitle(),user.getFirstName(),TypeNote.DE_INTERES);
+
+        Mockito.when(noteRepository.findById(idNote)).thenReturn(Optional.of(note));
+        Mockito.when(noteRepository.findNumberOfThanksByNote(idNote)).thenReturn(numberOfThanks);
+
+        //Assert
+        TypeNoteDTO response = noteService.noteClasification(idNote);
+
+        Mockito.verify(noteRepository,Mockito.atLeastOnce())
+                .findById(idNote);
+        Mockito.verify(noteRepository,Mockito.times(1))
+                .findNumberOfThanksByNote(idNote);
+
+        Assertions.assertEquals(expectNote,response);
+    }
+
+    @ParameterizedTest
+    @ValueSource(ints = {11,15,200}) // Con mas de 10 Thanks Destacada
+    void getClasificationDestacada(int input){
+        Long idNote = 1L;
+        //Arrange (Cree el Note y User con los Setts porque son entidades
+        // que sino requieren la carga de todos sus atributos
+        Note note = new Note();
+        User user = new User();
+        user.setFirstName("J K Rowling");
+        note.setAuthor(user);
+        note.setTitle("Harry Potter");
+
+        Map<String,Integer>numberOfThanks= Map.of("Count_thanks", input);
+
+        //Arrange Expect
+        TypeNoteDTO expectNote = new TypeNoteDTO(note.getTitle(),user.getFirstName(),TypeNote.DESTACADA);
+
+        Mockito.when(noteRepository.findById(idNote)).thenReturn(Optional.of(note));
+        Mockito.when(noteRepository.findNumberOfThanksByNote(idNote)).thenReturn(numberOfThanks);
+
+        //Assert
+        TypeNoteDTO response = noteService.noteClasification(idNote);
+
+        Mockito.verify(noteRepository,Mockito.atLeastOnce())
+                .findById(idNote);
+        Mockito.verify(noteRepository,Mockito.times(1))
+                .findNumberOfThanksByNote(idNote);
+
+        Assertions.assertEquals(expectNote,response);
     }
 }
