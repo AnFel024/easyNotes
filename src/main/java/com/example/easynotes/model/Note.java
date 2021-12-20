@@ -1,6 +1,7 @@
 package com.example.easynotes.model;
 
 import com.example.easynotes.enumerator.RevisionStatus;
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -12,8 +13,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name = "note")
 public class Note {
