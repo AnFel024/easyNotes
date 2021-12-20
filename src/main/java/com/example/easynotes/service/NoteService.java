@@ -174,6 +174,18 @@ public class NoteService implements INoteService {
 
         return new TypeNoteDTO(note.getTitle(), note.getAuthor().getFirstName(), typeNote);
     }
+
+    @Override
+    public void updateNoteStatus(UpdateStatusNoteDto updateStatusNoteDto) {
+        Note note = noteRepository.findById(updateStatusNoteDto.getIdNote())
+                .orElseThrow(()-> new ResourceNotFoundException("Note","id",updateStatusNoteDto.getIdNote()));
+        note.setStatus(updateStatusNoteDto.getStatus());
+        User user = userRepository.findById(updateStatusNoteDto.getIdUser())
+                .orElseThrow(()->new ResourceNotFoundException("User","id",updateStatusNoteDto.getIdUser()));
+        note.getRevisers().add(user);
+        noteRepository.save(note);
+
+    }
 }
 
 

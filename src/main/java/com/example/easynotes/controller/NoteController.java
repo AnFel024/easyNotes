@@ -72,4 +72,9 @@ public class NoteController {
     public TypeNoteDTO getNoteClasification(@PathVariable Long id){
         return noteService.noteClasification(id);
     }
+
+    @PutMapping("/status")
+    public void updateNoteStatus(@RequestBody UpdateStatusNoteDto updateStatusNoteDto){
+        noteService.updateNoteStatus(updateStatusNoteDto);
+    }
 }

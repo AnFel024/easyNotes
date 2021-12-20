@@ -1,5 +1,6 @@
 package com.example.easynotes.model;
 
+import com.example.easynotes.enumerator.RevisionStatus;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
@@ -43,5 +44,8 @@ public class Note {
     //@Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
     private LocalDate updatedAt;
+
+    @Column
+    private RevisionStatus status=RevisionStatus.PENDIENTE;
 
 }

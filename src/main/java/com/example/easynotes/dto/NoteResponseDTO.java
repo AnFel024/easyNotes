@@ -1,5 +1,6 @@
 package com.example.easynotes.dto;
 
+import com.example.easynotes.enumerator.RevisionStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,4 +20,5 @@ import lombok.NoArgsConstructor;
 public class NoteResponseDTO extends NoteDTO {
 
     private Long id;
+    private String status;
 }

@@ -1,5 +1,6 @@
 package com.example.easynotes.dto;
 
+import com.example.easynotes.enumerator.RevisionStatus;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -19,7 +20,8 @@ public class NoteResponseWithCantLikesDTO extends NoteResponseDTO{
     int cantThanks;
 
     public NoteResponseWithCantLikesDTO(Long id, int cantThanks) {
-        super(id);
+        super(id,null);
         this.cantThanks = cantThanks;
     }
+
 }
