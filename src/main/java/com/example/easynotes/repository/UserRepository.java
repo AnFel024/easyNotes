@@ -44,6 +44,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
             "where note.createdAt >= :date" )
     List<User> findUserByNoteCreatedAtLessOrEqualDate(@Param("date") Date date);
 
+    //select n.created_at as date from note n where n.created_at between '2020-12-06' and '2021-12-12';
+    @Query( "select count(note) from Note note where note.author = :user and note.createdAt between :date1 and :date2")
+    Integer countNote(@Param("date1") Date date1, @Param("date2") Date date2, @Param("user") User user);
+
     /*
     @Override
     default List<User> findAll() {
