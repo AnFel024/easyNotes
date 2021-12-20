@@ -9,6 +9,7 @@ import com.example.easynotes.repository.NoteRepository;
 import com.example.easynotes.repository.ThankRepository;
 import com.example.easynotes.repository.UserRepository;
 import com.example.easynotes.utils.ListMapper;
+import org.apache.tomcat.jni.Local;
 import org.modelmapper.AbstractConverter;
 import org.modelmapper.Converter;
 import org.modelmapper.ModelMapper;
@@ -18,7 +19,12 @@ import org.springframework.stereotype.Service;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.MonthDay;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalField;
+import java.time.temporal.WeekFields;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -130,26 +136,30 @@ public class UserService implements IUserService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Con esta configuración se toma el primer día de la semana. (p.e. para el 20/12 tomaría el domingo 19/12)
+     * Lo usa en la capa del servicio, trayendo todas las notas e iterando sobre ellas.
+     * @param datesList
+     * @return tipo de publicador
+     */
     private String publicationType(List<LocalDate> datesList){
         System.out.println("Prueba");
         datesList.forEach(System.out::println);
         int daysFlag= 0;
         int weekFlag= 0;
+
         for (int i = 0; i <3; i++) {
             final int pos= i;
+            TemporalField field= WeekFields.of(Locale.US).dayOfWeek();
             if (datesList.stream()
-                    .anyMatch(date ->  LocalDate.now().minusDays(pos).compareTo(date) == 0))
+                    .anyMatch(date -> LocalDate.now().minusDays(pos).compareTo(date) == 0))
                 daysFlag++;
-            List<LocalDate> tempDates= datesList.stream()
-                                                    .filter(
-                                                            date -> LocalDate.now()
-                                                                    .minusWeeks(pos)
-                                                                    .compareTo(date.minusWeeks(pos-1)) > 0)
-                                                    .collect(Collectors.toList());
-            tempDates.forEach(System.out::println);
-            if (tempDates.stream()
-                    .anyMatch(date -> LocalDate.now().minusWeeks(pos).compareTo(date.minusWeeks(pos-1)) < 7))
-                    //.anyMatch(date -> LocalDate.now().minusWeeks(pos).compareTo(date.minusWeeks(pos-1))  7))
+
+            if (datesList.stream()
+                    .anyMatch(date -> LocalDate.now()
+                                .minusWeeks(pos).with(field,1)
+                                .compareTo(date.minusDays(pos*7)) < 0))
+                    //.anyMatch(date -> LocalDate.now().minusDays((pos+1)*7).compareTo(date.minusDays(pos*7)) < 0))
                 weekFlag++;
         }
 
@@ -160,7 +170,6 @@ public class UserService implements IUserService {
         else
             return "Publicador";
     }
-
 
     /**
      * Endpoint Get con la funcionalidad de traer un CategoriaUsuario
