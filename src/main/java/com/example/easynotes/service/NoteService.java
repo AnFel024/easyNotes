@@ -165,7 +165,7 @@ public class NoteService implements INoteService {
     public TypeNoteDTO noteClasification(Long id) {
         TypeNote typeNote = null;
         Note note = noteRepository.findById(id)
-                .orElseThrow(()-> new RuntimeException("El id no existe"));
+                .orElseThrow(()-> new ResourceNotFoundException("Note","id",id));
         int countThanks= noteRepository.findNumberOfThanksByNote(id)
                 .get("Count_thanks");
         if(countThanks<5) typeNote = TypeNote.NORMAL;
