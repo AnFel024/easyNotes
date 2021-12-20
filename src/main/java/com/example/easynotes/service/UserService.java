@@ -39,15 +39,13 @@ public class UserService implements IUserService {
     @PersistenceContext
     EntityManager entityManager;
 
-    UserService(UserRepository userRepository,
+    public UserService(UserRepository userRepository,
                 NoteRepository noteRepository,
                 ThankRepository thankRepository,
-                ModelMapper modelMapper,
-                ListMapper listMapper) {
+                ModelMapper modelMapper) {
         this.userRepository = userRepository;
         this.noteRepository = noteRepository;
         this.thankRepository = thankRepository;
-        this.listMapper = listMapper;
 
 
         Converter<Long, User> authorIdToUserConverter = new AbstractConverter<Long, User>() {

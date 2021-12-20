@@ -27,11 +27,11 @@ public class NoteService implements INoteService {
     @Autowired
     NoteService(NoteRepository noteRepository,
                 UserRepository userRepository,
-                ModelMapper modelMapper,
-                ListMapper listMapper) {
+                ModelMapper modelMapper
+                ) {
         this.noteRepository = noteRepository;
         this.userRepository = userRepository;
-        this.listMapper = listMapper;
+
 
         //Converter used to retrieve cant of user's notes
         Converter<Set<Note>, Integer> notesToCantNotesConverter = new AbstractConverter<Set<Note>, Integer>() {
