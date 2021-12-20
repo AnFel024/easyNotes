@@ -23,6 +23,7 @@ import java.time.Duration;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalField;
 import java.time.temporal.WeekFields;
 import java.util.*;
@@ -156,11 +157,19 @@ public class UserService implements IUserService {
                 daysFlag++;
 
             if (datesList.stream()
-                    .anyMatch(date -> LocalDate.now()
-                                .minusWeeks(pos).with(field,1)
-                                .compareTo(date.minusDays(pos*7)) < 0))
+                    .anyMatch(date -> (
+                            date.isAfter(LocalDate.now()
+                                .minusWeeks(pos).with(field,1)) &
+                            date.isBefore(LocalDate.now()
+                                .minusWeeks(pos).with(field,7)) |
+                                    (date.isEqual(LocalDate.now()
+                                        .minusWeeks(pos).with(field,1)) |
+                                    date.isEqual(LocalDate.now()
+                                        .minusWeeks(pos).with(field,7)))
+                    )))
                     //.anyMatch(date -> LocalDate.now().minusDays((pos+1)*7).compareTo(date.minusDays(pos*7)) < 0))
                 weekFlag++;
+
         }
 
         if (daysFlag==3)
