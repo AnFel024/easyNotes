@@ -53,6 +53,7 @@ public class UserService implements IUserService {
         this.noteRepository = noteRepository;
         this.thankRepository = thankRepository;
 
+        modelMapper=new ModelMapper();
 
         Converter<Long, User> authorIdToUserConverter = new AbstractConverter<Long, User>() {
             @Override
@@ -155,10 +156,15 @@ public class UserService implements IUserService {
                     .anyMatch(date -> LocalDate.now().minusDays(pos).compareTo(date) == 0))
                 daysFlag++;
 
+            // date.minus(n+1)<d < date.minus(n)
+
+            // date.minus(n+1)>d && date.minus(n)<d
             if (datesList.stream()
-                    .anyMatch(date -> LocalDate.now()
+                    .anyMatch(date ->  LocalDate.now()
                                 .minusWeeks(pos).with(field,1)
-                                .compareTo(date.minusDays(pos*7)) < 0))
+                                .compareTo(date.minusDays(pos*7)) < 0
+                    ))
+
                     //.anyMatch(date -> LocalDate.now().minusDays((pos+1)*7).compareTo(date.minusDays(pos*7)) < 0))
                 weekFlag++;
         }
