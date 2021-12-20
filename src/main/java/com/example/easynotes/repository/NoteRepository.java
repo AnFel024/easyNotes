@@ -7,6 +7,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface NoteRepository extends JpaRepository<Note, Long> {
@@ -24,6 +25,19 @@ public interface NoteRepository extends JpaRepository<Note, Long> {
             "where YEAR(thank.createdAt) = :year " +
             "group by note.id order by cant_thanks desc")
     List<HashMap<String, Object>> findTopThreeNotesMostThankedByDate(int year);
+
+    //select count(t.note_id) as count_thanks,n.id as id_note from note n inner join thank t
+    //    on n.id = t.note_id group by n.id;
+
+
+
+  /*  @Query("SELECT n.thanks.size FROM Note n where n.id=:id")
+    int findNumberOfThanksByNote(@Param("id") int id);
+    */
+
+    @Query("SELECT SIZE(n.thanks) as Count_thanks FROM Note n where n.id=:id")
+    Map<String,Integer> findNumberOfThanksByNote(@Param("id") Long id);
+
 }
 /*
 note    thank
