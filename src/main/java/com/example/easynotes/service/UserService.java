@@ -54,6 +54,7 @@ public class UserService implements IUserService {
         this.noteRepository = noteRepository;
         this.thankRepository = thankRepository;
 
+        modelMapper=new ModelMapper();
 
         Converter<Long, User> authorIdToUserConverter = new AbstractConverter<Long, User>() {
             @Override
@@ -156,6 +157,9 @@ public class UserService implements IUserService {
                     .anyMatch(date -> LocalDate.now().minusDays(pos).compareTo(date) == 0))
                 daysFlag++;
 
+            // date.minus(n+1)<d < date.minus(n)
+
+            // date.minus(n+1)>d && date.minus(n)<d
             if (datesList.stream()
                     .anyMatch(date -> (
                             date.isAfter(LocalDate.now()
